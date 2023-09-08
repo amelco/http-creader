@@ -69,12 +69,13 @@ identifica_variavel(char* linha, int tam)
     if (linha[i] == '=')
     {
       var.nome[i-1] = '\0';
-      variaveis[qtd_var].nome = var.nome;
+      strcpy(variaveis[qtd_var].nome, var.nome);
       qtd_var++;
       return var;
     }
     var.nome[i-1] = linha[i];
   }
+  return var;
 }
 
 
@@ -87,7 +88,7 @@ parse_file(char* arquivo, Rota *rotas)
 
   char* line = NULL;
   size_t len = 0;
-  ssize_t read;
+  size_t read;
   printf("\nConteudo do arquivo:\n");
   while ((read = getline(&line, &len, file)) != -1)
   {
@@ -95,8 +96,10 @@ parse_file(char* arquivo, Rota *rotas)
     printf("%s", trimmed);
 
     if (trimmed[0] == '@')
+    {
       identifica_variavel(trimmed, len);
-    printf("%s\n", variaveis[0]);
+      printf("nome: %s\nvalor: %s", variaveis[0].nome, variaveis[0].valor);
+    }
 
   }
 
